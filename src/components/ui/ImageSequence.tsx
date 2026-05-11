@@ -44,25 +44,51 @@ export default function ImageSequence() {
 
   // Load all images on mount
   useEffect(() => {
-    const loadedImages: HTMLImageElement[] = [];
+    let isMounted = true;
+    const loadedImages: HTMLImageElement[] = new Array(frameCount);
     let loadedCount = 0;
 
-    for (let i = 1; i <= frameCount; i++) {
-      const img = new Image();
-      const frameNumber = i.toString().padStart(3, "0");
-      img.src = `/images_background/ezgif-frame-${frameNumber}.jpg`;
+    const loadImages = async () => {
+      // Prioritize the first frame
+      const firstImg = new Image();
+      firstImg.src = `/images_background/ezgif-frame-001.jpg`;
       
-      img.onload = () => {
-        loadedCount++;
-        if (loadedCount === frameCount) {
-          // Draw first frame once all are loaded
+      await new Promise((resolve) => {
+        firstImg.onload = () => {
+          if (!isMounted) return;
+          loadedImages[0] = firstImg;
           drawFrame(0, loadedImages);
-        }
-      };
-      
-      loadedImages.push(img);
-    }
-    setImages(loadedImages);
+          loadedCount++;
+          resolve(null);
+        };
+        firstImg.onerror = () => resolve(null); // Fallback if image fails
+      });
+
+      if (!isMounted) return;
+
+      // Then load the rest concurrently
+      for (let i = 2; i <= frameCount; i++) {
+        const img = new Image();
+        const frameNumber = i.toString().padStart(3, "0");
+        img.src = `/images_background/ezgif-frame-${frameNumber}.jpg`;
+        
+        img.onload = () => {
+          if (!isMounted) return;
+          loadedImages[i - 1] = img;
+          loadedCount++;
+          
+          if (loadedCount === frameCount) {
+            setImages([...loadedImages]);
+          }
+        };
+      }
+    };
+
+    loadImages();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   // Update canvas when scroll changes

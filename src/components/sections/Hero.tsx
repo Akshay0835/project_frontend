@@ -26,12 +26,11 @@ export default function Hero() {
   };
 
   const itemVariants: any = {
-    hidden: { y: 40, opacity: 0, filter: "blur(10px)" },
+    hidden: { y: 40, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
-      filter: "blur(0px)",
-      transition: { duration: 1.2, ease: PREMIUM_EASING },
+      transition: { duration: 0.8, ease: PREMIUM_EASING },
     },
   };
 
