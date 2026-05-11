@@ -5,20 +5,21 @@ import { useScroll, useMotionValueEvent } from "framer-motion";
 
 export default function ImageSequence() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [images, setImages] = useState<HTMLImageElement[]>([]);
+  const imagesRef = useRef<(HTMLImageElement | null)[]>(new Array(240).fill(null));
   const frameCount = 240;
 
   const { scrollYProgress } = useScroll();
 
   // Draw a specific frame to the canvas
-  const drawFrame = (index: number, imgs: HTMLImageElement[]) => {
-    if (!canvasRef.current || !imgs[index]) return;
+  const drawFrame = (index: number) => {
+    if (!canvasRef.current) return;
+    
+    const img = imagesRef.current[index];
+    if (!img) return; // Don't draw if not loaded yet
     
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-
-    const img = imgs[index];
     
     // Calculate aspect ratio for cover effect
     const canvasRatio = canvas.width / canvas.height;
@@ -45,8 +46,6 @@ export default function ImageSequence() {
   // Load all images on mount
   useEffect(() => {
     let isMounted = true;
-    const loadedImages: HTMLImageElement[] = new Array(frameCount);
-    let loadedCount = 0;
 
     const loadImages = async () => {
       // Prioritize the first frame
@@ -56,9 +55,8 @@ export default function ImageSequence() {
       await new Promise((resolve) => {
         firstImg.onload = () => {
           if (!isMounted) return;
-          loadedImages[0] = firstImg;
-          drawFrame(0, loadedImages);
-          loadedCount++;
+          imagesRef.current[0] = firstImg;
+          drawFrame(0);
           resolve(null);
         };
         firstImg.onerror = () => resolve(null); // Fallback if image fails
@@ -74,11 +72,15 @@ export default function ImageSequence() {
         
         img.onload = () => {
           if (!isMounted) return;
-          loadedImages[i - 1] = img;
-          loadedCount++;
+          imagesRef.current[i - 1] = img;
           
-          if (loadedCount === frameCount) {
-            setImages([...loadedImages]);
+          // If this newly loaded image happens to be the one we currently need, draw it immediately!
+          const currentIndex = Math.min(
+            frameCount - 1,
+            Math.floor(scrollYProgress.get() * frameCount)
+          );
+          if (i - 1 === currentIndex) {
+            drawFrame(currentIndex);
           }
         };
       }
@@ -89,18 +91,18 @@ export default function ImageSequence() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [scrollYProgress]);
 
   // Update canvas when scroll changes
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (images.length !== frameCount || !canvasRef.current) return;
+    if (!canvasRef.current) return;
 
     const frameIndex = Math.min(
       frameCount - 1,
       Math.floor(latest * frameCount)
     );
     
-    drawFrame(frameIndex, images);
+    drawFrame(frameIndex);
   });
 
   // Handle window resize
@@ -112,13 +114,11 @@ export default function ImageSequence() {
         canvasRef.current.height = window.innerHeight;
         
         // Redraw current frame
-        if (images.length === frameCount) {
-           const frameIndex = Math.min(
-              frameCount - 1,
-              Math.floor(scrollYProgress.get() * frameCount)
-           );
-           drawFrame(frameIndex, images);
-        }
+        const frameIndex = Math.min(
+          frameCount - 1,
+          Math.floor(scrollYProgress.get() * frameCount)
+        );
+        drawFrame(frameIndex);
       }
     };
     
@@ -126,7 +126,7 @@ export default function ImageSequence() {
     handleResize(); // Initial setup
     
     return () => window.removeEventListener("resize", handleResize);
-  }, [images, scrollYProgress]);
+  }, [scrollYProgress]);
 
   return (
     <div className="fixed inset-0 w-full h-full -z-20 bg-black overflow-hidden">
