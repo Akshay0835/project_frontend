@@ -76,9 +76,10 @@ const TiltCard = ({ service, index }: { service: any; index: number }) => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+      initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: false, amount: 0.2 }}
+      transition={{ duration: 0.8, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
       style={{ perspective: "1000px" }}
       className="h-full"
     >
@@ -91,17 +92,17 @@ const TiltCard = ({ service, index }: { service: any; index: number }) => {
           rotateY,
           transformStyle: "preserve-3d",
         }}
-        className={`relative w-full h-full p-8 rounded-2xl bg-black/60 backdrop-blur-lg border border-white/10 transition-colors duration-300 ${borderClass} group cursor-pointer`}
+        className={`relative w-full h-full p-6 sm:p-8 rounded-2xl bg-black/60 backdrop-blur-lg border border-white/10 transition-colors duration-300 ${borderClass} group cursor-pointer`}
       >
         <div 
           className={`absolute inset-0 bg-gradient-to-br ${glowClass} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl -z-10`} 
           style={{ transform: "translateZ(-20px)" }}
         />
         
-        <div style={{ transform: "translateZ(40px)" }} className="flex flex-col gap-4">
-          <div className="text-white mb-2" dangerouslySetInnerHTML={{ __html: service.icon }} />
-          <h3 className="text-2xl font-bold mt-2">{service.title}</h3>
-          <p className="text-slate-300">{service.description}</p>
+        <div style={{ transform: "translateZ(40px)" }} className="flex flex-col gap-3 sm:gap-4">
+          <div className="text-white mb-1 sm:mb-2" dangerouslySetInnerHTML={{ __html: service.icon }} />
+          <h3 className="text-xl sm:text-2xl font-bold mt-1 sm:mt-2">{service.title}</h3>
+          <p className="text-sm sm:text-base text-slate-300">{service.description}</p>
         </div>
       </motion.div>
     </motion.div>
@@ -113,15 +114,16 @@ export default function ServicesPage() {
     <section className="min-h-screen pt-32 pb-20 px-6 flex flex-col items-center relative overflow-hidden w-full">
       <div className="container mx-auto max-w-6xl">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: -100 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: false, amount: 0.2 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-20"
+          className="text-center mb-16 md:mb-20"
         >
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight mb-4 sm:mb-6">
             Our <span className="text-cyan-400">Services</span>
           </h1>
-          <p className="text-xl text-slate-400 max-w-2xl mx-auto">
+          <p className="text-base sm:text-xl text-slate-400 max-w-2xl mx-auto px-4">
             We deliver end-to-end digital solutions designed to elevate your brand.
           </p>
         </motion.div>

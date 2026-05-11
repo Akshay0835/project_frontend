@@ -96,7 +96,7 @@ export default function Navbar() {
           {/* Mobile Toggle */}
           <button
             onClick={toggleMenu}
-            className="md:hidden relative z-50 w-10 h-10 flex flex-col items-center justify-center gap-1.5 focus:outline-none pr-2"
+            className="md:hidden relative z-50 w-10 h-10 flex flex-col items-center justify-center gap-1.5 focus:outline-none"
             aria-label="Toggle Menu"
           >
             <span

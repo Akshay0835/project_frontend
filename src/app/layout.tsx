@@ -22,9 +22,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} antialiased dark`}
+      className={`${inter.variable} antialiased dark overflow-x-hidden`}
     >
-      <body className="min-h-screen bg-[#050505] text-slate-100 flex flex-col font-sans selection:bg-cyan-500/30 selection:text-cyan-50">
+      <body className="min-h-screen bg-[#050505] text-slate-100 flex flex-col font-sans selection:bg-cyan-500/30 selection:text-cyan-50 overflow-x-hidden w-full max-w-[100vw]">
         <Navbar />
         {children}
       </body>

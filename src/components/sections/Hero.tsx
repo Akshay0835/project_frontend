@@ -57,7 +57,7 @@ export default function Hero() {
           
           <motion.h1 
             variants={itemVariants}
-            className="text-5xl md:text-7xl lg:text-[5.5rem] font-bold tracking-tighter text-white mb-6 leading-[1.05]"
+            className="text-4xl sm:text-5xl md:text-7xl lg:text-[5.5rem] font-bold tracking-tighter text-white mb-6 leading-[1.05]"
           >
             Crafting <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-400">Premium</span> <br className="hidden md:block" />
             Digital Realities.
@@ -65,14 +65,14 @@ export default function Hero() {
 
           <motion.p 
             variants={itemVariants}
-            className="text-lg md:text-xl text-slate-400 mb-10 max-w-2xl leading-relaxed font-light"
+            className="text-base sm:text-lg md:text-xl text-slate-400 mb-10 max-w-2xl leading-relaxed font-light"
           >
             We are TSC Web Development Agency. We engineer immersive, high-performance web applications that blur the line between code and art.
           </motion.p>
 
-          <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-6 items-center">
-            <Link href="/contact" className="group relative px-8 py-4 bg-white/5 overflow-hidden rounded-full font-medium tracking-wide border border-white/10 backdrop-blur-md text-white hover:border-cyan-500/50 hover:shadow-[0_0_30px_rgba(0,240,255,0.2)] transition-all duration-500">
-              <span className="relative z-10 flex items-center gap-2">
+          <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-center w-full sm:w-auto">
+            <Link href="/contact" className="w-full sm:w-auto text-center group relative px-6 py-3 sm:px-8 sm:py-4 bg-white/5 overflow-hidden rounded-full font-medium tracking-wide border border-white/10 backdrop-blur-md text-white hover:border-cyan-500/50 hover:shadow-[0_0_30px_rgba(0,240,255,0.2)] transition-all duration-500">
+              <span className="relative z-10 flex items-center justify-center gap-2">
                 Start Your Project
                 <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />

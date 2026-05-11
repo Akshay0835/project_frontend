@@ -6,7 +6,7 @@ import ServicesPage from "@/app/services/page";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between relative">
+    <main className="flex min-h-screen flex-col items-center justify-between relative overflow-x-hidden w-full max-w-[100vw]">
       <ImageSequence />
       <Hero />
       <AboutPage />
