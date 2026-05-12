@@ -28,6 +28,7 @@ export default function CurtainHero() {
   // Laser width scales horizontally with the curtain gap
   const laserWidthCore = useTransform(scrollYProgress, [0.1, 0.4], ["1px", "81px"]);
   const laserWidthGlow = useTransform(scrollYProgress, [0.1, 0.4], ["10px", "210px"]);
+  const laserWidthOuter = useTransform(scrollYProgress, [0.1, 0.4], ["20px", "420px"]);
   
   // 4. Grid fades and zooms in (20% to 50%)
   const gridOpacity = useTransform(scrollYProgress, [0.2, 0.5], [0, 1]);
@@ -152,14 +153,14 @@ export default function CurtainHero() {
         >
           <motion.div style={{ width: laserWidthCore }} className="h-full bg-white blur-[4px]" />
           <motion.div style={{ width: laserWidthGlow }} className="absolute h-full bg-cyan-400/80 blur-[20px]" />
-          <motion.div style={{ width: `calc(${laserWidthGlow} * 2)` }} className="absolute h-full bg-emerald-500/40 blur-[60px]" />
+          <motion.div style={{ width: laserWidthOuter }} className="absolute h-full bg-emerald-500/40 blur-[60px]" />
         </motion.div>
 
         {/* --- 3. The Curtains --- */}
         {/* Left Curtain */}
         <motion.div 
           style={{ x: leftCurtainX }}
-          className="absolute top-0 left-0 w-1/2 h-full bg-[#050505]/60 backdrop-blur-2xl sm:backdrop-blur-3xl z-40 origin-left will-change-transform shadow-[20px_0_100px_rgba(0,0,0,1)] border-r border-white/[0.1] overflow-hidden"
+          className="absolute top-0 left-0 w-1/2 h-full bg-[#050505]/90 backdrop-blur-xl sm:backdrop-blur-3xl z-40 origin-left will-change-transform shadow-[20px_0_100px_rgba(0,0,0,1)] border-r border-white/[0.1] overflow-hidden"
         >
           {/* 3D Bevel Edge */}
           <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black/80 to-transparent pointer-events-none" />
@@ -173,7 +174,7 @@ export default function CurtainHero() {
         {/* Right Curtain */}
         <motion.div 
           style={{ x: rightCurtainX }}
-          className="absolute top-0 right-0 w-1/2 h-full bg-[#050505]/60 backdrop-blur-2xl sm:backdrop-blur-3xl z-40 origin-right will-change-transform shadow-[-20px_0_100px_rgba(0,0,0,1)] border-l border-white/[0.1] overflow-hidden"
+          className="absolute top-0 right-0 w-1/2 h-full bg-[#050505]/90 backdrop-blur-xl sm:backdrop-blur-3xl z-40 origin-right will-change-transform shadow-[-20px_0_100px_rgba(0,0,0,1)] border-l border-white/[0.1] overflow-hidden"
         >
           {/* 3D Bevel Edge */}
           <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black/80 to-transparent pointer-events-none" />
