@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import React, { useRef } from "react";
+import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from "framer-motion";
+import React, { useRef, useState, useEffect } from "react";
 
 const services = [
   {
@@ -33,8 +33,18 @@ const services = [
 const TiltCard = ({ service, index }: { service: any; index: number }) => {
   const ref = useRef<HTMLDivElement>(null);
   
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+  
   const x = useMotionValue(0);
   const y = useMotionValue(0);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
 
   const mouseXSpring = useSpring(x, { stiffness: 150, damping: 15 });
   const mouseYSpring = useSpring(y, { stiffness: 150, damping: 15 });
@@ -43,23 +53,26 @@ const TiltCard = ({ service, index }: { service: any; index: number }) => {
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-15deg", "15deg"]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (!ref.current) return;
+    if (isMobile || !ref.current) return;
     
     const rect = ref.current.getBoundingClientRect();
     const width = rect.width;
     const height = rect.height;
     
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
+    const mX = e.clientX - rect.left;
+    const mY = e.clientY - rect.top;
     
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
+    const xPct = mX / width - 0.5;
+    const yPct = mY / height - 0.5;
     
     x.set(xPct);
     y.set(yPct);
+    mouseX.set(mX);
+    mouseY.set(mY);
   };
 
   const handleMouseLeave = () => {
+    if (isMobile) return;
     x.set(0);
     y.set(0);
   };
@@ -74,10 +87,18 @@ const TiltCard = ({ service, index }: { service: any; index: number }) => {
     service.accent === "emerald" ? "from-emerald-500/20" : 
     "from-purple-500/20";
 
+  const backgroundTemplate = useMotionTemplate`
+    radial-gradient(
+      600px circle at ${mouseX}px ${mouseY}px,
+      var(--tw-gradient-from),
+      transparent 80%
+    )
+  `;
+
   return (
     <motion.div
-      initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
-      whileInView={{ opacity: 1, x: 0 }}
+      initial={isMobile ? { opacity: 0, rotateX: 60, y: 30, scale: 0.9 } : { opacity: 0, scale: 0.9, y: 50 }}
+      whileInView={isMobile ? { opacity: 1, rotateX: 0, y: 0, scale: 1 } : { opacity: 1, scale: 1, y: 0 }}
       viewport={{ once: false, amount: 0.2 }}
       transition={{ duration: 0.8, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
       style={{ perspective: "1000px" }}
@@ -88,21 +109,46 @@ const TiltCard = ({ service, index }: { service: any; index: number }) => {
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         style={{
-          rotateX,
-          rotateY,
+          rotateX: isMobile ? 0 : rotateX,
+          rotateY: isMobile ? 0 : rotateY,
           transformStyle: "preserve-3d",
         }}
-        className={`relative w-full h-full p-6 sm:p-8 rounded-2xl bg-black/60 backdrop-blur-lg border border-white/10 transition-colors duration-300 ${borderClass} group cursor-pointer`}
+        className={`relative w-full h-full p-8 sm:p-10 rounded-3xl bg-[#050505]/80 backdrop-blur-xl border border-white/[0.05] transition-colors duration-500 ${borderClass} group cursor-pointer overflow-hidden shadow-2xl`}
       >
-        <div 
-          className={`absolute inset-0 bg-gradient-to-br ${glowClass} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl -z-10`} 
-          style={{ transform: "translateZ(-20px)" }}
-        />
+        {/* Desktop Dynamic Spotlight */}
+        {!isMobile && (
+          <motion.div
+            className={`absolute inset-0 z-0 transition-opacity duration-500 opacity-0 group-hover:opacity-100 ${glowClass.replace('/20', '')}`}
+            style={{
+              background: backgroundTemplate,
+              opacity: 0.15
+            }}
+          />
+        )}
+
+        {/* Mobile Automated Pulsing Glow */}
+        {isMobile && (
+          <motion.div
+            className={`absolute inset-0 z-0 opacity-20 ${glowClass.replace('/20', '')}`}
+            animate={{
+              background: [
+                "radial-gradient(400px circle at 0% 0%, var(--tw-gradient-from), transparent 70%)",
+                "radial-gradient(400px circle at 100% 100%, var(--tw-gradient-from), transparent 70%)",
+                "radial-gradient(400px circle at 0% 100%, var(--tw-gradient-from), transparent 70%)",
+                "radial-gradient(400px circle at 0% 0%, var(--tw-gradient-from), transparent 70%)"
+              ]
+            }}
+            transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+          />
+        )}
         
-        <div style={{ transform: "translateZ(40px)" }} className="flex flex-col gap-3 sm:gap-4">
-          <div className="text-white mb-1 sm:mb-2" dangerouslySetInnerHTML={{ __html: service.icon }} />
-          <h3 className="text-xl sm:text-2xl font-bold mt-1 sm:mt-2">{service.title}</h3>
-          <p className="text-sm sm:text-base text-slate-300">{service.description}</p>
+        {/* Deep 3D Content Translation */}
+        <div style={{ transform: isMobile ? "none" : "translateZ(60px)" }} className="flex flex-col gap-4 sm:gap-6 relative z-10 group-hover:scale-105 transition-transform duration-500">
+          <div className="w-16 h-16 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-white mb-2 shadow-inner shadow-white/5 group-hover:bg-white/[0.08] transition-colors duration-500" dangerouslySetInnerHTML={{ __html: service.icon }} />
+          <div>
+            <h3 className="text-2xl sm:text-3xl font-bold mt-2 text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-slate-400 transition-all duration-300">{service.title}</h3>
+            <p className="text-base sm:text-lg text-slate-400 mt-2 leading-relaxed font-light">{service.description}</p>
+          </div>
         </div>
       </motion.div>
     </motion.div>
@@ -112,23 +158,32 @@ const TiltCard = ({ service, index }: { service: any; index: number }) => {
 export default function ServicesPage() {
   return (
     <section className="min-h-screen pt-32 pb-20 px-6 flex flex-col items-center relative overflow-hidden w-full">
-      <div className="container mx-auto max-w-6xl">
+      
+      {/* Unique Services Section Background */}
+      <div className="absolute inset-0 z-0 pointer-events-none flex items-center justify-center">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200vw] h-[200vw] sm:w-[60vw] sm:h-[60vw] bg-emerald-600/20 sm:bg-emerald-600/10 rounded-full blur-[100px] sm:blur-[150px] mix-blend-screen opacity-80 sm:opacity-70" />
+        {/* Subtle diagonal technical pattern */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'repeating-linear-gradient(45deg, #fff 0, #fff 1px, transparent 1px, transparent 40px)' }} />
+      </div>
+
+      <div className="container mx-auto max-w-6xl relative z-10">
         <motion.div
-          initial={{ opacity: 0, x: -100 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, amount: 0.2 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-16 md:mb-20"
+          className="text-center mb-16 md:mb-24 relative p-8 rounded-3xl bg-black/40 backdrop-blur-xl border border-white/[0.05] max-w-4xl mx-auto shadow-2xl"
         >
-          <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight mb-4 sm:mb-6">
-            Our <span className="text-cyan-400">Services</span>
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-[1px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent" />
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight mb-4 sm:mb-8 text-white">
+            Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.3)]">Services</span>
           </h1>
-          <p className="text-base sm:text-xl text-slate-400 max-w-2xl mx-auto px-4">
-            We deliver end-to-end digital solutions designed to elevate your brand.
+          <p className="text-base sm:text-xl text-slate-300 max-w-2xl mx-auto px-4 font-light leading-relaxed">
+            We deliver end-to-end digital solutions designed to elevate your brand through uncompromising design and elite engineering.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16">
           {services.map((service, index) => (
             <TiltCard key={index} service={service} index={index} />
           ))}

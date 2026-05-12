@@ -37,7 +37,7 @@ export default function Hero() {
   return (
     <section ref={containerRef} className="relative w-full h-screen flex flex-col justify-center items-center perspective-1000">
       {/* Main Content Overlay */}
-      <motion.div 
+      <motion.div
         style={{ y: yText, opacity: opacityText }}
         className="z-10 container mx-auto px-6 text-center flex flex-col items-center max-w-5xl"
       >
@@ -54,8 +54,8 @@ export default function Hero() {
               </span>
             </div>
           </motion.div>
-          
-          <motion.h1 
+
+          <motion.h1
             variants={itemVariants}
             className="text-4xl sm:text-5xl md:text-7xl lg:text-[5.5rem] font-bold tracking-tighter text-white mb-6 leading-[1.05]"
           >
@@ -63,7 +63,7 @@ export default function Hero() {
             Digital Realities.
           </motion.h1>
 
-          <motion.p 
+          <motion.p
             variants={itemVariants}
             className="text-base sm:text-lg md:text-xl text-slate-400 mb-10 max-w-2xl leading-relaxed font-light"
           >
@@ -97,8 +97,8 @@ export default function Hero() {
       >
         <span className="text-[10px] uppercase tracking-[0.3em] text-slate-500 font-medium">Scroll</span>
         <div className="w-[1px] h-16 bg-white/10 overflow-hidden relative">
-          <motion.div 
-            animate={{ y: ["-100%", "200%"] }} 
+          <motion.div
+            animate={{ y: ["-100%", "200%"] }}
             transition={{ repeat: Infinity, duration: 2.5, ease: "linear" }}
             className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-transparent via-cyan-400 to-transparent"
           />
