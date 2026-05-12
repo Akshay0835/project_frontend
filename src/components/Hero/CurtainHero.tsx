@@ -1,53 +1,37 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 
 const TAGLINE = "Turning Simple Business into BRAND";
 
 export default function CurtainHero() {
-  const [scrollProgress, setScrollProgress] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      // Calculate progress based on the 300vh container (approx 3 * window.innerHeight)
-      const containerHeight = window.innerHeight * 3;
-      // Scrollable distance is containerHeight - window.innerHeight
-      const maxScroll = containerHeight - window.innerHeight;
-      
-      if (maxScroll <= 0) return;
-      
-      const currentScroll = window.scrollY;
-      const progress = Math.min(1, Math.max(0, currentScroll / maxScroll));
-      setScrollProgress(progress);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    // Initial calculation
-    handleScroll();
-    
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const containerRef = useRef<HTMLElement>(null);
+  
+  // Hardware-accelerated scroll tracking (bypasses React render cycle)
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
 
   // 1. Tagline fades out early (0 to 10%)
-  const taglineOpacity = scrollProgress < 0.1 ? 1 - (scrollProgress / 0.1) : 0;
-  const taglineScale = 1 + (scrollProgress * 0.5);
+  const taglineOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
+  const taglineScale = useTransform(scrollYProgress, [0, 0.1], [1, 1.05]);
 
   // 2. Curtains split (10% to 40%)
-  const curtainProgress = scrollProgress < 0.1 ? 0 : scrollProgress > 0.4 ? 1 : (scrollProgress - 0.1) / 0.3;
-  const leftCurtainX = `-${curtainProgress * 100}%`;
-  const rightCurtainX = `${curtainProgress * 100}%`;
+  const leftCurtainX = useTransform(scrollYProgress, [0.1, 0.4], ["0%", "-100%"]);
+  const rightCurtainX = useTransform(scrollYProgress, [0.1, 0.4], ["0%", "100%"]);
   
-  // 3. Cinematic Laser Reveal Light
-  // Glows intensely as curtains just start opening, then fades as they fully open.
-  const laserOpacity = scrollProgress < 0.1 ? 0 : scrollProgress > 0.4 ? 0 : scrollProgress < 0.25 ? (scrollProgress - 0.1) / 0.15 : 1 - ((scrollProgress - 0.25) / 0.15);
+  // 3. Cinematic Laser Reveal Light (Peaks at 25%, gone by 40%)
+  const laserOpacity = useTransform(scrollYProgress, [0.1, 0.25, 0.4], [0, 1, 0]);
+  
   // Laser width scales horizontally with the curtain gap
-  const laserWidthCore = `${(curtainProgress * 80) + 1}px`;
-  const laserWidthGlow = `${(curtainProgress * 200) + 10}px`;
+  const laserWidthCore = useTransform(scrollYProgress, [0.1, 0.4], ["1px", "81px"]);
+  const laserWidthGlow = useTransform(scrollYProgress, [0.1, 0.4], ["10px", "210px"]);
   
   // 4. Grid fades and zooms in (20% to 50%)
-  const gridOpacity = scrollProgress < 0.2 ? 0 : scrollProgress > 0.5 ? 1 : (scrollProgress - 0.2) / 0.3;
-  const gridScale = 0.85 + (gridOpacity * 0.15); // Dramatic zoom in
+  const gridOpacity = useTransform(scrollYProgress, [0.2, 0.5], [0, 1]);
+  const gridScale = useTransform(scrollYProgress, [0.2, 0.5], [0.85, 1]);
 
   // Framer Motion variants
 
@@ -70,7 +54,7 @@ export default function CurtainHero() {
   };
 
   return (
-    <section className="relative w-full h-[300vh] bg-transparent">
+    <section ref={containerRef} className="relative w-full h-[300vh] bg-transparent">
       {/* Sticky viewport container */}
       <div className="sticky top-0 w-full h-screen overflow-hidden bg-transparent flex flex-col items-center justify-center">
         
@@ -174,8 +158,8 @@ export default function CurtainHero() {
         {/* --- 3. The Curtains --- */}
         {/* Left Curtain */}
         <motion.div 
-          style={{ x: leftCurtainX === "-0%" ? "0%" : leftCurtainX }}
-          className="absolute top-0 left-0 w-1/2 h-full bg-[#050505]/60 backdrop-blur-[100px] z-40 origin-left will-change-transform shadow-[20px_0_100px_rgba(0,0,0,1)] border-r border-white/[0.1] overflow-hidden"
+          style={{ x: leftCurtainX }}
+          className="absolute top-0 left-0 w-1/2 h-full bg-[#050505]/60 backdrop-blur-2xl sm:backdrop-blur-3xl z-40 origin-left will-change-transform shadow-[20px_0_100px_rgba(0,0,0,1)] border-r border-white/[0.1] overflow-hidden"
         >
           {/* 3D Bevel Edge */}
           <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black/80 to-transparent pointer-events-none" />
@@ -189,7 +173,7 @@ export default function CurtainHero() {
         {/* Right Curtain */}
         <motion.div 
           style={{ x: rightCurtainX }}
-          className="absolute top-0 right-0 w-1/2 h-full bg-[#050505]/60 backdrop-blur-[100px] z-40 origin-right will-change-transform shadow-[-20px_0_100px_rgba(0,0,0,1)] border-l border-white/[0.1] overflow-hidden"
+          className="absolute top-0 right-0 w-1/2 h-full bg-[#050505]/60 backdrop-blur-2xl sm:backdrop-blur-3xl z-40 origin-right will-change-transform shadow-[-20px_0_100px_rgba(0,0,0,1)] border-l border-white/[0.1] overflow-hidden"
         >
           {/* 3D Bevel Edge */}
           <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black/80 to-transparent pointer-events-none" />
