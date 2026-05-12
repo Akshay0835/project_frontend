@@ -55,12 +55,11 @@ export default function CurtainHero() {
   };
 
   const letterVariants: import("framer-motion").Variants = {
-    hidden: { opacity: 0, y: 30, filter: "blur(10px)" },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
-      filter: "blur(0px)",
-      transition: { duration: 1, ease: [0.2, 0.65, 0.3, 0.9] },
+      transition: { duration: 0.8, ease: [0.2, 0.65, 0.3, 0.9] },
     },
   };
 
@@ -75,8 +74,8 @@ export default function CurtainHero() {
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:3rem_3rem] md:bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,#000_20%,transparent_100%)]" />
           
           {/* Subtle central volumetric glow */}
-          <div className="absolute w-[200vw] h-[200vw] sm:w-[80vw] sm:h-[80vw] max-w-4xl max-h-4xl bg-cyan-500/20 sm:bg-cyan-500/10 rounded-full blur-[80px] sm:blur-[100px] opacity-80 sm:opacity-60 mix-blend-screen" />
-          <div className="absolute w-[150vw] h-[150vw] sm:w-[60vw] sm:h-[60vw] max-w-2xl max-h-2xl bg-emerald-500/20 sm:bg-emerald-500/10 rounded-full blur-[60px] sm:blur-[80px] opacity-70 sm:opacity-40 mix-blend-screen" />
+          <div className="absolute w-[200vw] h-[200vw] sm:w-[80vw] sm:h-[80vw] max-w-4xl max-h-4xl bg-[radial-gradient(circle,rgba(6,182,212,0.15)_0%,transparent_60%)] sm:bg-[radial-gradient(circle,rgba(6,182,212,0.08)_0%,transparent_60%)] mix-blend-screen" />
+          <div className="absolute w-[150vw] h-[150vw] sm:w-[60vw] sm:h-[60vw] max-w-2xl max-h-2xl bg-[radial-gradient(circle,rgba(16,185,129,0.15)_0%,transparent_60%)] sm:bg-[radial-gradient(circle,rgba(16,185,129,0.08)_0%,transparent_60%)] mix-blend-screen" />
           
           {/* Noise texture overlay */}
           <div className="absolute inset-0 opacity-[0.015]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }} />
@@ -173,7 +172,7 @@ export default function CurtainHero() {
           className="absolute top-0 left-0 w-1/2 h-full bg-[#050505]/90 backdrop-blur-xl sm:backdrop-blur-3xl z-40 origin-left will-change-transform shadow-[20px_0_100px_rgba(0,0,0,1)] border-r border-white/[0.1] overflow-hidden"
         >
           {/* Beautiful Gradient Backgrounds on the curtains themselves */}
-          <div className="absolute top-1/4 right-0 w-[150vw] h-[150vw] sm:w-[60vw] sm:h-[60vw] bg-cyan-900/20 rounded-full blur-[80px] sm:blur-[120px] pointer-events-none translate-x-1/2" />
+          <div className="absolute top-1/4 right-0 w-[150vw] h-[150vw] sm:w-[60vw] sm:h-[60vw] bg-[radial-gradient(circle,rgba(8,145,178,0.15)_0%,transparent_70%)] pointer-events-none translate-x-1/2" />
           
           {/* Subtle grid on curtain */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:2rem_2rem] sm:bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_100%_100%_at_100%_50%,#000_30%,transparent_100%)] pointer-events-none" />
@@ -193,7 +192,7 @@ export default function CurtainHero() {
           className="absolute top-0 right-0 w-1/2 h-full bg-[#050505]/90 backdrop-blur-xl sm:backdrop-blur-3xl z-40 origin-right will-change-transform shadow-[-20px_0_100px_rgba(0,0,0,1)] border-l border-white/[0.1] overflow-hidden"
         >
           {/* Beautiful Gradient Backgrounds on the curtains themselves */}
-          <div className="absolute top-1/4 left-0 w-[150vw] h-[150vw] sm:w-[60vw] sm:h-[60vw] bg-emerald-900/20 rounded-full blur-[80px] sm:blur-[120px] pointer-events-none -translate-x-1/2" />
+          <div className="absolute top-1/4 left-0 w-[150vw] h-[150vw] sm:w-[60vw] sm:h-[60vw] bg-[radial-gradient(circle,rgba(5,150,105,0.15)_0%,transparent_70%)] pointer-events-none -translate-x-1/2" />
           
           {/* Subtle grid on curtain */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:2rem_2rem] sm:bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_100%_100%_at_0%_50%,#000_30%,transparent_100%)] pointer-events-none" />
@@ -217,7 +216,7 @@ export default function CurtainHero() {
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 2, ease: "easeOut" }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120vw] sm:w-[60vw] h-[120vw] sm:h-[60vw] bg-gradient-to-tr from-cyan-500/10 to-emerald-500/10 blur-[60px] sm:blur-[100px] rounded-full mix-blend-screen pointer-events-none"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150vw] sm:w-[80vw] h-[150vw] sm:h-[80vw] bg-[radial-gradient(circle,rgba(6,182,212,0.15)_0%,rgba(16,185,129,0.1)_40%,transparent_70%)] mix-blend-screen pointer-events-none"
           />
 
           <motion.h1 

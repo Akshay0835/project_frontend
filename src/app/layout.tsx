@@ -32,8 +32,8 @@ export default function RootLayout({
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:2rem_2rem] sm:bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,#000_10%,transparent_100%)]" />
           
           {/* Deep, subtle ambient glows in the corners */}
-          <div className="absolute top-[-10%] left-[-10%] w-[120vw] h-[120vw] sm:w-[50vw] sm:h-[50vw] bg-cyan-900/20 sm:bg-cyan-900/10 rounded-full blur-[80px] sm:blur-[150px] mix-blend-screen opacity-80 sm:opacity-60 animate-pulse" style={{ animationDuration: '8s' }} />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[120vw] h-[120vw] sm:w-[50vw] sm:h-[50vw] bg-emerald-900/20 sm:bg-emerald-900/10 rounded-full blur-[80px] sm:blur-[150px] mix-blend-screen opacity-70 sm:opacity-50 animate-pulse" style={{ animationDuration: '10s', animationDelay: '2s' }} />
+          <div className="absolute top-[-10%] left-[-10%] w-[120vw] h-[120vw] sm:w-[50vw] sm:h-[50vw] bg-[radial-gradient(circle,rgba(8,145,178,0.15)_0%,transparent_60%)] mix-blend-screen opacity-80 sm:opacity-60 animate-pulse" style={{ animationDuration: '8s' }} />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[120vw] h-[120vw] sm:w-[50vw] sm:h-[50vw] bg-[radial-gradient(circle,rgba(5,150,105,0.15)_0%,transparent_60%)] mix-blend-screen opacity-70 sm:opacity-50 animate-pulse" style={{ animationDuration: '10s', animationDelay: '2s' }} />
         </div>
 
         <Navbar />
