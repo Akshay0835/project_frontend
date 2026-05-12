@@ -172,6 +172,12 @@ export default function CurtainHero() {
           style={{ x: leftCurtainX }}
           className="absolute top-0 left-0 w-1/2 h-full bg-[#050505]/90 backdrop-blur-xl sm:backdrop-blur-3xl z-40 origin-left will-change-transform shadow-[20px_0_100px_rgba(0,0,0,1)] border-r border-white/[0.1] overflow-hidden"
         >
+          {/* Beautiful Gradient Backgrounds on the curtains themselves */}
+          <div className="absolute top-1/4 right-0 w-[150vw] h-[150vw] sm:w-[60vw] sm:h-[60vw] bg-cyan-900/20 rounded-full blur-[80px] sm:blur-[120px] pointer-events-none translate-x-1/2" />
+          
+          {/* Subtle grid on curtain */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:2rem_2rem] sm:bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_100%_100%_at_100%_50%,#000_30%,transparent_100%)] pointer-events-none" />
+
           {/* 3D Bevel Edge */}
           <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black/80 to-transparent pointer-events-none" />
           {/* Subtle noise texture on the curtain */}
@@ -186,6 +192,12 @@ export default function CurtainHero() {
           style={{ x: rightCurtainX }}
           className="absolute top-0 right-0 w-1/2 h-full bg-[#050505]/90 backdrop-blur-xl sm:backdrop-blur-3xl z-40 origin-right will-change-transform shadow-[-20px_0_100px_rgba(0,0,0,1)] border-l border-white/[0.1] overflow-hidden"
         >
+          {/* Beautiful Gradient Backgrounds on the curtains themselves */}
+          <div className="absolute top-1/4 left-0 w-[150vw] h-[150vw] sm:w-[60vw] sm:h-[60vw] bg-emerald-900/20 rounded-full blur-[80px] sm:blur-[120px] pointer-events-none -translate-x-1/2" />
+          
+          {/* Subtle grid on curtain */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:2rem_2rem] sm:bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_100%_100%_at_0%_50%,#000_30%,transparent_100%)] pointer-events-none" />
+
           {/* 3D Bevel Edge */}
           <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black/80 to-transparent pointer-events-none" />
           {/* Subtle noise texture on the curtain */}
@@ -200,11 +212,19 @@ export default function CurtainHero() {
           style={{ opacity: taglineOpacity, scale: taglineScale }}
           className="absolute inset-0 flex flex-col items-center justify-center z-50 pointer-events-none px-4 sm:px-6"
         >
+          {/* Intense Volumetric Glow directly behind the text */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 2, ease: "easeOut" }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120vw] sm:w-[60vw] h-[120vw] sm:h-[60vw] bg-gradient-to-tr from-cyan-500/10 to-emerald-500/10 blur-[60px] sm:blur-[100px] rounded-full mix-blend-screen pointer-events-none"
+          />
+
           <motion.h1 
             variants={sentenceVariants}
             initial="hidden"
             animate="visible"
-            className="text-4xl sm:text-6xl md:text-[7vw] font-medium text-center text-white tracking-tighter leading-[1.05] max-w-7xl flex flex-wrap justify-center gap-x-[0.15em] sm:gap-x-[0.2em] drop-shadow-2xl"
+            className="text-4xl sm:text-6xl md:text-[7vw] font-medium text-center text-white tracking-tighter leading-[1.15] sm:leading-[1.05] max-w-7xl flex flex-wrap justify-center gap-x-[0.15em] sm:gap-x-[0.2em] drop-shadow-2xl relative z-10"
           >
             {TAGLINE.split(" ").map((word, wordIndex) => (
               <span key={wordIndex} className="inline-block overflow-hidden pb-4 sm:pb-8">
