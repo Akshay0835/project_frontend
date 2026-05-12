@@ -1,38 +1,48 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useEffect, useState } from "react";
 
 const TAGLINE = "Turning Simple Business into BRAND";
 
 export default function CurtainHero() {
-  const containerRef = useRef<HTMLElement>(null);
-  
-  // Hardware-accelerated scroll tracking (bypasses React render cycle)
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"]
-  });
+  // Use global window scroll to completely bypass intersection observer bugs on mobile
+  const { scrollY } = useScroll();
+  const [maxScroll, setMaxScroll] = useState(2000);
+
+  useEffect(() => {
+    const updateMaxScroll = () => {
+      // The container is 300vh tall. The viewport is 100vh.
+      // Therefore, the total scrollable distance for this component is 200vh.
+      setMaxScroll(window.innerHeight * 2);
+    };
+    updateMaxScroll();
+    window.addEventListener("resize", updateMaxScroll);
+    return () => window.removeEventListener("resize", updateMaxScroll);
+  }, []);
+
+  // Map global scrollY to a 0-1 progress value, tightly clamped
+  const scrollProgress = useTransform(scrollY, [0, maxScroll], [0, 1]);
 
   // 1. Tagline fades out early (0 to 10%)
-  const taglineOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
-  const taglineScale = useTransform(scrollYProgress, [0, 0.1], [1, 1.05]);
+  const taglineOpacity = useTransform(scrollProgress, [0, 0.1], [1, 0]);
+  const taglineScale = useTransform(scrollProgress, [0, 0.1], [1, 1.05]);
 
   // 2. Curtains split (10% to 40%)
-  const leftCurtainX = useTransform(scrollYProgress, [0.1, 0.4], ["0%", "-100%"]);
-  const rightCurtainX = useTransform(scrollYProgress, [0.1, 0.4], ["0%", "100%"]);
+  const leftCurtainX = useTransform(scrollProgress, [0.1, 0.4], ["0%", "-100%"]);
+  const rightCurtainX = useTransform(scrollProgress, [0.1, 0.4], ["0%", "100%"]);
   
   // 3. Cinematic Laser Reveal Light (Peaks at 25%, gone by 40%)
-  const laserOpacity = useTransform(scrollYProgress, [0.1, 0.25, 0.4], [0, 1, 0]);
+  const laserOpacity = useTransform(scrollProgress, [0.1, 0.25, 0.4], [0, 1, 0]);
   
   // Laser width scales horizontally with the curtain gap
-  const laserWidthCore = useTransform(scrollYProgress, [0.1, 0.4], ["1px", "81px"]);
-  const laserWidthGlow = useTransform(scrollYProgress, [0.1, 0.4], ["10px", "210px"]);
-  const laserWidthOuter = useTransform(scrollYProgress, [0.1, 0.4], ["20px", "420px"]);
+  const laserWidthCore = useTransform(scrollProgress, [0.1, 0.4], ["1px", "81px"]);
+  const laserWidthGlow = useTransform(scrollProgress, [0.1, 0.4], ["10px", "210px"]);
+  const laserWidthOuter = useTransform(scrollProgress, [0.1, 0.4], ["20px", "420px"]);
   
   // 4. Grid fades and zooms in (20% to 50%)
-  const gridOpacity = useTransform(scrollYProgress, [0.2, 0.5], [0, 1]);
-  const gridScale = useTransform(scrollYProgress, [0.2, 0.5], [0.85, 1]);
+  const gridOpacity = useTransform(scrollProgress, [0.2, 0.5], [0, 1]);
+  const gridScale = useTransform(scrollProgress, [0.2, 0.5], [0.85, 1]);
 
   // Framer Motion variants
 
@@ -55,7 +65,7 @@ export default function CurtainHero() {
   };
 
   return (
-    <section ref={containerRef} className="relative w-full h-[300vh] bg-transparent">
+    <section className="relative w-full h-[300vh] bg-transparent">
       {/* Sticky viewport container */}
       <div className="sticky top-0 w-full h-screen overflow-hidden bg-transparent flex flex-col items-center justify-center">
         
