@@ -51,7 +51,7 @@ export default function Process() {
         <div className="absolute w-[1px] h-full bg-gradient-to-b from-transparent via-cyan-500/20 to-transparent left-[15%] hidden md:block" />
         <div className="absolute w-[1px] h-full bg-gradient-to-b from-transparent via-emerald-500/20 to-transparent right-[15%] hidden md:block" />
         {/* Central timeline glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200vw] h-[150vw] sm:w-[80vw] sm:h-[40vw] bg-gradient-to-r from-cyan-900/40 sm:from-cyan-900/20 via-emerald-900/40 sm:via-emerald-900/20 to-cyan-900/40 sm:to-cyan-900/20 blur-[90px] sm:blur-[120px] mix-blend-screen opacity-80 sm:opacity-50" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200vw] h-[150vw] sm:w-[80vw] sm:h-[40vw] bg-[radial-gradient(ellipse,rgba(6,182,212,0.15)_0%,rgba(16,185,129,0.1)_50%,transparent_70%)] mix-blend-screen opacity-80 sm:opacity-50" />
       </div>
 
       <div className="container mx-auto max-w-5xl relative z-10">
@@ -141,7 +141,7 @@ function StepItem({ step, index, isEven, isMobile }: { step: any; index: number;
               transition={{ duration: 3, repeat: Infinity, delay: index * 0.5, ease: "easeInOut" }}
             />
           )}
-          <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 blur-[40px] rounded-full group-hover:bg-emerald-500/20 transition-colors duration-500" />
+          <div className="absolute top-0 right-0 w-32 h-32 bg-[radial-gradient(circle,rgba(16,185,129,0.15)_0%,transparent_70%)] rounded-full group-hover:bg-[radial-gradient(circle,rgba(16,185,129,0.25)_0%,transparent_70%)] transition-colors duration-500" />
           
           <h3 className="text-2xl sm:text-3xl font-bold mb-4 relative z-10 text-white group-hover:text-emerald-300 transition-colors duration-300">{step.title}</h3>
           <p className="text-slate-400 relative z-10 leading-relaxed font-light text-sm sm:text-base">{step.description}</p>

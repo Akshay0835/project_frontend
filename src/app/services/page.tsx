@@ -129,16 +129,9 @@ const TiltCard = ({ service, index }: { service: any; index: number }) => {
         {/* Mobile Automated Pulsing Glow */}
         {isMobile && (
           <motion.div
-            className={`absolute inset-0 z-0 opacity-20 ${glowClass.replace('/20', '')}`}
-            animate={{
-              background: [
-                "radial-gradient(400px circle at 0% 0%, var(--tw-gradient-from), transparent 70%)",
-                "radial-gradient(400px circle at 100% 100%, var(--tw-gradient-from), transparent 70%)",
-                "radial-gradient(400px circle at 0% 100%, var(--tw-gradient-from), transparent 70%)",
-                "radial-gradient(400px circle at 0% 0%, var(--tw-gradient-from), transparent 70%)"
-              ]
-            }}
-            transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+            className={`absolute inset-0 z-0 opacity-20 bg-gradient-to-br from-transparent to-transparent ${service.accent === 'cyan' ? 'via-cyan-500/20' : service.accent === 'emerald' ? 'via-emerald-500/20' : 'via-purple-500/20'}`}
+            animate={{ opacity: [0.1, 0.3, 0.1] }}
+            transition={{ duration: 4, repeat: Infinity, delay: index * 0.5, ease: "easeInOut" }}
           />
         )}
         
@@ -161,7 +154,7 @@ export default function ServicesPage() {
       
       {/* Unique Services Section Background */}
       <div className="absolute inset-0 z-0 pointer-events-none flex items-center justify-center">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200vw] h-[200vw] sm:w-[60vw] sm:h-[60vw] bg-emerald-600/20 sm:bg-emerald-600/10 rounded-full blur-[100px] sm:blur-[150px] mix-blend-screen opacity-80 sm:opacity-70" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200vw] h-[200vw] sm:w-[60vw] sm:h-[60vw] bg-[radial-gradient(circle,rgba(5,150,105,0.15)_0%,transparent_60%)] mix-blend-screen opacity-80 sm:opacity-70" />
         {/* Subtle diagonal technical pattern */}
         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'repeating-linear-gradient(45deg, #fff 0, #fff 1px, transparent 1px, transparent 40px)' }} />
       </div>
